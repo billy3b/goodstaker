@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-const Card = ({cardTitle, stakerate, stakeValue }) => {
+const Card = () => {
   const [cardanoStakedValue, setCardanoStakedValue] = useState(0);
   const [cardanoStakeRate, setCardanoStakeRate] = useState(0);
   const [polkadotStakedValue, setPolkadotStakedValue] = useState(0);
@@ -9,6 +9,35 @@ const Card = ({cardTitle, stakerate, stakeValue }) => {
   const [polkadotStakeRate, setPolkadotStakeRate] = useState(0);
   const [kusamaStakeRate, setKusamaStakeRate] = useState(0);
 
+  const data = [
+    {
+      totalSupply: "1,340,519,708",
+      imgURL:
+        "https://imgnew.outlookindia.com/uploadimage/library/16_9/16_9_5/Polkadot__1666094678.jpg",
+      cardTitle: "Polkadot",
+      stakeRate: polkadotStakeRate,
+      totalBounded: polkadotStakedValue,
+      validator: "Luganodes",
+    },
+    {
+      totalSupply: "45,000,000,000",
+      imgURL:
+        "https://public.bnbstatic.com/static/academy/uploads-original/6628e286df1f461a86d25314c7204525.png",
+      cardTitle: "Cardano",
+      stakeRate: cardanoStakeRate,
+      totalBounded: cardanoStakedValue,
+      validator: "Luganodes",
+    },
+    {
+      totalSupply: "9,651,217",
+      imgURL:
+        "https://polkadot.network/static/bed1c19deef483db7e55a76b92ece07b/ksm.png",
+      cardTitle: "Kusama Chains",
+      stakeRate: kusamaStakeRate,
+      totalBounded: kusamaStakedValue,
+      validator: "Luganodes",
+    },
+  ];
 
   useEffect(() => {
     axios({
@@ -52,7 +81,7 @@ useEffect(() => {
       console.log(error);
     });
 }, []);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 useEffect(() => {
   axios({
     method: "get",
@@ -63,30 +92,32 @@ useEffect(() => {
     },
   })
     .then(function (response) {
-      console.log(response.data.stakedValue);
+
       const roundedStakeRate = response.data.totalStaked.toFixed(2);
       const roundedStakeValue = response.data.stakedValue.toFixed(2);
       setCardanoStakedValue(roundedStakeValue);
       setCardanoStakeRate(roundedStakeRate);
-      console.log(response.data);
+
     })
     .catch(function (error) {
-      // handle error
       console.log(error);
     });
 }, []);
 
-  return (
-    <div className="bg-white shadow-md rounded-md p-4">
-      <div className="mt-4">
-        <h3 className="text-lg font-bold">{cardTitle}</h3>
-        <p className="mt-2 text-gray-600">
-          Stakerate:{stakerate}
-          Stakevalue: {stakeValue}
-        </p>
-      </div>
+  return ( 
+<>
+  {data.map((card, index) => (
+    <div key={index} className="p-4">
+      <Card
+        handleTickClick={handleTickClick}
+        clickedCards={clickedCards}
+        {...card}
+      />
     </div>
-  );
+  ))}
+</>
+
+)
 };
 
 export default Card;
